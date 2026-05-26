@@ -1,17 +1,35 @@
-// Uses the Vite dev server API — works across all devices on the same network
-// because both PC and mobile hit the same server at the same IP
+import { supabase } from '../../src/utils/supabaseClient';
+
+const TABLE_NAME = 'kv_store_75fee4df';
+const KEY = 'app_vendors';
 
 export async function getVendors(): Promise<any[]> {
-  const res = await fetch('/api/vendors');
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  try {
+    const { data, error } = await supabase
+      .from(TABLE_NAME)
+      .select('value')
+      .eq('key', KEY)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Supabase error:', error);
+      // Return empty instead of fallback to see if connection works
+      return [];
+    }
+
+    return data?.value || [];
+  } catch (e) {
+    console.error('Fetch error:', e);
+    return [];
+  }
 }
 
 export async function saveVendors(vendors: any[]): Promise<void> {
-  const res = await fetch('/api/vendors', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(vendors),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { error } = await supabase
+    .from(TABLE_NAME)
+    .upsert({ key: KEY, value: vendors });
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }

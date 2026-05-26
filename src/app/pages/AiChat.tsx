@@ -4,8 +4,8 @@ import { getDynamicSafeSpend, DAY_NAMES } from "../components/safeSpendEngine";
 
 // Free API from https://build.nvidia.com — no billing required, just sign up
 const NVIDIA_API_KEY = "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";
-const NVIDIA_URL = "/api/nvidia/chat/completions"; // Proxied via Vite → integrate.api.nvidia.com (avoids CORS)
-const MODEL = "meta/llama-3.3-70b-instruct";
+const NVIDIA_URL = "/api/nvidia/chat/completions";
+const MODEL = "meta/llama-3.1-8b-instruct";
 
 interface Message {
   role: "user" | "assistant";
