@@ -1,0 +1,54 @@
+[
+  {
+    "name": "MK Dosa Point",
+    "category": "Food/Mess",
+    "avgPrice": 60,
+    "location": "Behind IH hostel",
+    "locationUrl": "https://maps.app.goo.gl/gfuTJfcPX4Q3TyA87",
+    "lat": null,
+    "lng": null,
+    "distance": "2 mins walk from backgate",
+    "description": "Breakfast and lunch restaurant",
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGb9KjhTjil39lpED8SEy13pPfXtemVBo5pzNtuOUHoDFr1SCV0fP8yJJHnwXRbXntD5DlxvPMO0tAcDBFDdKibNe0Nou8A3ErWcimOyJNeZWH9ggXK5AjZNWLNLkb6VOxsO9Y=s1360-w1360-h1020-rw",
+    "id": "1776924398180"
+  },
+  {
+    "name": "Puliogare Point",
+    "category": "Food/Mess",
+    "avgPrice": 100,
+    "location": "Near APS block ",
+    "locationUrl": "https://maps.app.goo.gl/snArJzfveRn7LWg49",
+    "lat": null,
+    "lng": null,
+    "distance": "2 mins walk from front gate",
+    "description": "Breakfast and lunch restaurant",
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFGv6UMubQlwVsOcrZ_58x0RxE03jeGnOgpqoxcHScyP0wPjMK9v4t8mWIa3Jua9QLBpct1oX8sllzlRQSUdi-uANGNysVbATlqM5VmKTo98bHd4N9dljvTtib0S50U_3oHPBDdsw6BI0GI=w408-h306-k-no",
+    "id": "1776926273592"
+  },
+  {
+    "name": "Maruti Dosa Camp",
+    "category": "Food/Mess",
+    "avgPrice": 100,
+    "location": "Near Sri Renuka Yellamma Temple",
+    "locationUrl": "https://maps.app.goo.gl/GLcS1X298qF5Kr2u7",
+    "lat": null,
+    "lng": null,
+    "distance": "5 mins from front gate",
+    "description": "Breakfast",
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE4OWCR8VqSYPWfxb1hSqjI3VnGIN7GKBMlxdPNMx6LsRBCtGFPUXCNpeDB709vY17QYb2L8fUetXtMJANHF9K5WN-XFqljUr9Ohj52IOFltkpxjUMe2qyMzEP0lfd8SGY57Tu8=w426-h240-k-no",
+    "id": "1776927100267"
+  },
+  {
+    "name": "New Sms Gents PG",
+    "category": "Other",
+    "avgPrice": 8000,
+    "location": "10/5, 3rd Main Rd, Mount Joy Extension, Hanumanthnagar, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560004",
+    "locationUrl": "https://maps.app.goo.gl/4sZJXxhfbmmzBHFPA",
+    "lat": null,
+    "lng": null,
+    "distance": "5 m",
+    "description": "",
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHblIWLE2hkWdtAQwktH4IOY2rRqPKJV84v_Dz_JmGKRi68rB6oMferMhhMGPTlPOMJfDEKNZo9mkFP31UAdmKqK057JzZZZlGUv7IOhq-OlyeGktzMECFuFyl4u_pzJQKoj-SF=w426-h240-k-no",
+    "id": "1777530662184"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "name": "PocketUni",
+  "short_name": "PocketUni",
+  "description": "Smart spending tracker for university students",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
