@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PocketUni</string>
+    <string name="title_activity_main">PocketUni</string>
+    <string name="package_name">com.pocketuni.app</string>
+    <string name="custom_url_scheme">com.pocketuni.app</string>
+</resources>
