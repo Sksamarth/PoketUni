@@ -18,24 +18,28 @@ export function Login() {
   };
 
   const handleLogin = () => {
-    if (!username.trim() || !password.trim()) { setError("Please fill in all fields"); return; }
+    const cleanUser = username.trim().toLowerCase();
+    if (!cleanUser || !password.trim()) { setError("Please fill in all fields"); return; }
     const users = storedUsers();
-    if (users[username.toLowerCase()] === password) {
-      localStorage.setItem("loggedInUser", username.toLowerCase());
-      navigate(localStorage.getItem("onboardingComplete") ? "/" : "/onboarding");
+    if (users[cleanUser] === password) {
+      localStorage.setItem("loggedInUser", cleanUser);
+      // Check if this specific user has completed onboarding
+      const userSetupKey = `onboardingComplete_${cleanUser}`;
+      navigate(localStorage.getItem(userSetupKey) ? "/" : "/onboarding");
     } else {
       setError("Incorrect username or password");
     }
   };
 
   const handleSignup = () => {
-    if (!username.trim() || !password.trim()) { setError("Please fill in all fields"); return; }
+    const cleanUser = username.trim().toLowerCase();
+    if (!cleanUser || !password.trim()) { setError("Please fill in all fields"); return; }
     if (password.length < 6) { setError("Password must be at least 6 characters"); return; }
     const users = storedUsers();
-    if (users[username.toLowerCase()]) { setError("Username already taken"); return; }
-    users[username.toLowerCase()] = password;
+    if (users[cleanUser]) { setError("Username already taken"); return; }
+    users[cleanUser] = password;
     localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("loggedInUser", username.toLowerCase());
+    localStorage.setItem("loggedInUser", cleanUser);
     navigate("/onboarding");
   };
 

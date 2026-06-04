@@ -1,5 +1,12 @@
 {
   "appId": "com.pocketuni.app",
   "appName": "PocketUni",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "url": "https://poket-uni.vercel.app/",
+    "allowNavigation": [
+      "poket-uni.vercel.app",
+      "integrate.api.nvidia.com"
+    ]
+  }
 }

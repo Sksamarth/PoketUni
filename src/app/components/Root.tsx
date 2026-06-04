@@ -92,7 +92,8 @@ export function Root() {
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedInUser");
     if (!loggedIn) { navigate("/login"); return; }
-    const onboardingComplete = localStorage.getItem("onboardingComplete");
+
+    const onboardingComplete = localStorage.getItem(`onboardingComplete_${loggedIn}`);
     if (!onboardingComplete && location.pathname !== "/onboarding") {
       navigate("/onboarding");
     } else {

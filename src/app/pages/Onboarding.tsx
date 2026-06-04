@@ -81,7 +81,9 @@ export function Onboarding() {
       periodStartDay: parseInt(periodStartDay),
       periodEndDay:   parseInt(periodEndDay),
     }));
-    localStorage.setItem("onboardingComplete", "true");
+    // Save completion flag for this specific user
+    localStorage.setItem(`onboardingComplete_${loggedInUser}`, "true");
+    localStorage.setItem("onboardingComplete", "true"); // Fallback for safety
     localStorage.setItem("notificationSettings", JSON.stringify({ enabled: notifEnabled, time: notifTime }));
     if (notifEnabled) scheduleDailyCheck();
     navigate("/");
