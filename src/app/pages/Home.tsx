@@ -41,30 +41,18 @@ export function Home() {
   const getCurrentPeriod = () => {
     if (!budgetData) return { start: new Date(), end: new Date() };
     const today = new Date();
-    const currentDay = today.getDate();
-    const startDay = budgetData.periodStartDay;
-    const endDay   = budgetData.periodEndDay;
-    
-    let startMonth = today.getMonth();
-    let startYear = today.getFullYear();
-    
-    if (currentDay < startDay) {
-      startMonth -= 1;
-      if (startMonth < 0) { startMonth = 11; startYear -= 1; }
+    const d = today.getDate();
+    const m = today.getMonth();
+    const y = today.getFullYear();
+    const s = budgetData.periodStartDay;
+    const e = budgetData.periodEndDay;
+    if (s <= e) {
+      if (d >= s) return { start: new Date(y, m, s), end: new Date(y, m, e, 23, 59, 59, 999) };
+      return { start: new Date(y, m - 1, s), end: new Date(y, m - 1, e, 23, 59, 59, 999) };
+    } else {
+      if (d >= s) return { start: new Date(y, m, s), end: new Date(y, m + 1, e, 23, 59, 59, 999) };
+      return { start: new Date(y, m - 1, s), end: new Date(y, m, e, 23, 59, 59, 999) };
     }
-    
-    let endMonth = startMonth;
-    let endYear = startYear;
-    
-    if (endDay <= startDay || (endDay - startDay < 20)) {
-      endMonth += 1;
-      if (endMonth > 11) { endMonth = 0; endYear += 1; }
-    }
-    
-    return { 
-      start: new Date(startYear, startMonth, startDay), 
-      end: new Date(endYear, endMonth, endDay, 23, 59, 59, 999) 
-    };
   };
 
   const getTodaysExpenses   = () => expenses.filter(e => new Date(e.date).toDateString() === new Date().toDateString());
@@ -199,15 +187,13 @@ export function Home() {
           <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
               <div>
-                <p style={{ margin: "0 0 2px", fontSize: 12, color: "rgba(148,163,184,0.55)" }}>
-                  {todaysTotal > safeSpend ? "Today's Total Spent" : "Today's Safe Spend"}
-                </p>
-                <p style={{ margin: 0, fontSize: 28, fontWeight: 700, color: todaysTotal > safeSpend ? "#fb923c" : "#34d399" }}>
-                  ₹{todaysTotal > safeSpend ? todaysTotal : safeSpend}
+                <p style={{ margin: "0 0 2px", fontSize: 12, color: "rgba(148,163,184,0.55)" }}>Today's Safe Spend</p>
+                <p style={{ margin: 0, fontSize: 28, fontWeight: 700, color: todaysTotal > safeSpend ? "#f87171" : "#34d399" }}>
+                  ₹{safeSpend}
                 </p>
                 {todaysTotal > safeSpend ? (
-                  <p style={{ margin: "4px 0 0", fontSize: 12, color: "#fb923c", display: "flex", alignItems: "center", gap: 4 }}>
-                    ⚠️ Safe: ₹{safeSpend} | Overspent: ₹{(todaysTotal - safeSpend).toLocaleString()}
+                  <p style={{ margin: "4px 0 0", fontSize: 12, color: "#f87171", display: "flex", alignItems: "center", gap: 4 }}>
+                    ⚠️ Spent ₹{todaysTotal} · Over by ₹{(todaysTotal - safeSpend).toLocaleString()}
                   </p>
                 ) : hasHistory && (
                   <p style={{ margin: "4px 0 0", fontSize: 11, color: "rgba(148,163,184,0.5)", display: "flex", alignItems: "center", gap: 4 }}>
