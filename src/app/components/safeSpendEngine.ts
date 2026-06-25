@@ -73,7 +73,6 @@ export function getDynamicSafeSpend(currentExpenses?: { amount: number; date: st
     const budget = JSON.parse(localStorage.getItem("budgetData") || "null");
     if (!budget) return empty;
 
-    // Use passed-in expenses if available, otherwise read from localStorage
     const expenses: { amount: number; date: string }[] =
       currentExpenses ?? JSON.parse(localStorage.getItem("expenses") || "[]");
 
@@ -83,42 +82,45 @@ export function getDynamicSafeSpend(currentExpenses?: { amount: number; date: st
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // All spending this period including today
     const totalSpentThisPeriod = expenses
-      .filter(e => {
-        const d = new Date(e.date);
-        return d >= periodStart && d <= periodEnd;
-      })
+      .filter(e => { const d = new Date(e.date); return d >= periodStart && d <= periodEnd; })
       .reduce((s, e) => s + e.amount, 0);
 
-    // Money remaining after ALL spending so far
     const moneyLeft = available - totalSpentThisPeriod;
 
-    // Remaining days = today + future days until period end
+    // Count remaining days including today
     const remainingDays: Date[] = [];
     const cursor = new Date(today);
     while (cursor <= periodEnd) {
       remainingDays.push(new Date(cursor));
       cursor.setDate(cursor.getDate() + 1);
     }
-
     if (remainingDays.length === 0) return { ...empty, safeSpend: 0 };
 
-    // Build profile from history
+    // Need at least 4 weeks of history (28+ expenses) before trusting pattern weights
     const profile = buildSpendProfile(expenses);
+    const hasEnoughHistory = expenses.length >= 28;
 
-    const todayDow = today.getDay();
-    const dows = remainingDays.map(d => d.getDay());
-    const totalWeight = dows.reduce((s, dow) => s + profile.weights[dow], 0);
+    let safeSpend: number;
+    let todayWeight: number;
 
-    const todayWeight = totalWeight > 0
-      ? profile.weights[todayDow] / totalWeight
-      : 1 / remainingDays.length;
+    if (!hasEnoughHistory) {
+      // Simple equal split — most reliable with little history
+      todayWeight = 1 / remainingDays.length;
+      safeSpend = Math.max(0, Math.floor(moneyLeft / remainingDays.length));
+    } else {
+      const todayDow = today.getDay();
+      const dows = remainingDays.map(d => d.getDay());
+      const totalWeight = dows.reduce((s, dow) => s + profile.weights[dow], 0);
+      // Cap today's weight at 2x equal share to prevent extreme allocations
+      const equalShare = 1 / remainingDays.length;
+      todayWeight = totalWeight > 0
+        ? Math.min(profile.weights[todayDow] / totalWeight, equalShare * 2)
+        : equalShare;
+      safeSpend = Math.max(0, Math.floor(moneyLeft * todayWeight));
+    }
 
-    // Today's allocation from remaining money
-    const safeSpend = Math.max(0, Math.floor(moneyLeft * todayWeight));
-
-    return { safeSpend, todayWeight, hasHistory: profile.hasHistory, profile };
+    return { safeSpend, todayWeight, hasHistory: hasEnoughHistory && profile.hasHistory, profile };
   } catch {
     return empty;
   }
