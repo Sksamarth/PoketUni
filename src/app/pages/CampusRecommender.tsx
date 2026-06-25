@@ -39,6 +39,8 @@ function VendorImage({ url, name, category }: { url: string; name: string; categ
     <img
       src={url}
       alt={name}
+      referrerPolicy="no-referrer"
+      crossOrigin="anonymous"
       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
       onError={() => setFailed(true)}
     />
