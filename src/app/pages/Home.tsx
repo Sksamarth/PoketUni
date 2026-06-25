@@ -89,7 +89,7 @@ export function Home() {
   const totalDaysInPeriod    = Math.ceil((end.getTime() - start.getTime()) / 86400000) + 1;
   const daysRemaining        = Math.max(0, Math.ceil((end.getTime() - Date.now()) / 86400000));
   const daysPassed           = totalDaysInPeriod - daysRemaining;
-  const { safeSpend, todayWeight, hasHistory } = getDynamicSafeSpend();
+  const { safeSpend, todayWeight, hasHistory } = getDynamicSafeSpend(expenses);
   const todayDow             = new Date().getDay();
   const isHeavyDay           = todayWeight > 1 / 7 + 0.05;
   const isLightDay           = todayWeight < 1 / 7 - 0.05;

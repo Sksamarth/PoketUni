@@ -31,7 +31,8 @@ export function CampusRecommender() {
   const [loading, setLoading]                   = useState(true);
   const [error, setError]                       = useState("");
 
-  const { safeSpend } = getDynamicSafeSpend();
+  const expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
+  const { safeSpend } = getDynamicSafeSpend(expenses);
 
   const loadVendors = async () => {
     setLoading(true); setError("");

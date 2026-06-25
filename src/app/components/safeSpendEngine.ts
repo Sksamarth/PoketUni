@@ -61,7 +61,7 @@ function getPeriod(budget: any): { periodStart: Date; periodEnd: Date } {
   return { periodStart, periodEnd };
 }
 
-export function getDynamicSafeSpend(): {
+export function getDynamicSafeSpend(currentExpenses?: { amount: number; date: string }[]): {
   safeSpend: number;
   todayWeight: number;
   hasHistory: boolean;
@@ -73,8 +73,9 @@ export function getDynamicSafeSpend(): {
     const budget = JSON.parse(localStorage.getItem("budgetData") || "null");
     if (!budget) return empty;
 
+    // Use passed-in expenses if available, otherwise read from localStorage
     const expenses: { amount: number; date: string }[] =
-      JSON.parse(localStorage.getItem("expenses") || "[]");
+      currentExpenses ?? JSON.parse(localStorage.getItem("expenses") || "[]");
 
     const available = (budget.totalIncome || 0) - (budget.savingGoal || 0) - (budget.totalFixed || 0);
     const { periodStart, periodEnd } = getPeriod(budget);
