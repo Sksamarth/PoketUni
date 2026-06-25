@@ -196,76 +196,61 @@ export function CampusRecommender() {
           })}
         </div>
       ) : (
-        /* Map view */
-        <div style={{ position: "relative", height: "calc(100dvh - 140px)" }}>
-          <div style={{ position: "absolute", inset: 0, background: "#0d1b2e" }}>
-            {selectedVendor.locationUrl ? (
-              <iframe title="Campus Map" width="100%" height="100%" style={{ border: 0 }} loading="lazy" allowFullScreen src={toEmbedUrl(selectedVendor.locationUrl)} />
-            ) : selectedVendor.lat && selectedVendor.lng ? (
-              <iframe title="Campus Map" width="100%" height="100%" style={{ border: 0 }} loading="lazy" allowFullScreen src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${selectedVendor.lat},${selectedVendor.lng}&zoom=16`} />
-            ) : (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "rgba(148,163,184,0.45)", fontSize: 14 }}>No map available</div>
+        /* Detail view */
+        <div style={{ position: "relative", height: "calc(100dvh - 140px)", overflowY: "auto" }}>
+          {/* Top image instead of broken map */}
+          <div style={{ position: "relative", height: 240, overflow: "hidden", flexShrink: 0 }}>
+            <VendorImage url={selectedVendor.imageUrl} name={selectedVendor.name} category={selectedVendor.category} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(7,9,26,0.85) 0%, transparent 60%)" }} />
+            <button
+              onClick={() => setSelectedVendor(null)}
+              style={{
+                position: "absolute", top: 14, left: 14,
+                background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10,
+                color: "#e2e8f0", cursor: "pointer", padding: "6px 14px", fontSize: 13,
+              }}
+            >← Back</button>
+            {safeSpend > 0 && selectedVendor.avgPrice <= safeSpend && (
+              <div style={{ position: "absolute", top: 14, right: 14, background: "linear-gradient(135deg,#34d399,#059669)", padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600, color: "#fff", boxShadow: "0 0 12px rgba(52,211,153,0.4)" }}>
+                ✦ Fits Budget
+              </div>
             )}
           </div>
 
-          {/* Vendor info overlay */}
-          <div style={{
-            position: "absolute", bottom: 0, left: 0, right: 0,
-            background: "rgba(13,27,46,0.85)",
-            backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-            borderRadius: "24px 24px 0 0",
-            padding: "22px 20px 28px",
-          }}>
-            <div style={{ display: "flex", gap: 16, marginBottom: 16, alignItems: "flex-start" }}>
-              <img src={selectedVendor.imageUrl} alt={selectedVendor.name} style={{ width: 72, height: 72, borderRadius: 14, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)" }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "#e2e8f0" }}>{selectedVendor.name}</h3>
-                  {safeSpend > 0 && selectedVendor.avgPrice <= safeSpend && (
-                    <span style={{ fontSize: 11, fontWeight: 600, color: "#34d399", background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.3)", padding: "2px 8px", borderRadius: 20 }}>✦ Fits Budget</span>
-                  )}
-                </div>
-                <p style={{ margin: "0 0 8px", fontSize: 13, color: "rgba(148,163,184,0.6)" }}>{selectedVendor.description}</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#34d399", fontSize: 13 }}>
-                  <DollarSign size={15} /> Avg: ₹{selectedVendor.avgPrice}
-                </div>
+          {/* Vendor info */}
+          <div style={{ padding: "20px 20px 28px", background: "rgba(13,27,46,0.95)" }}>
+            <div style={{ marginBottom: 16 }}>
+              <h3 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 700, color: "#e2e8f0" }}>{selectedVendor.name}</h3>
+              <p style={{ margin: "0 0 10px", fontSize: 14, color: "rgba(148,163,184,0.7)" }}>{selectedVendor.description}</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#34d399", fontSize: 14 }}>
+                <DollarSign size={15} /> Avg: ₹{selectedVendor.avgPrice}
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
-              {[
-                { icon: <MapPin size={16} />, text: selectedVendor.location },
-                { icon: <Clock size={16} />,  text: `${selectedVendor.distance} walking` },
-              ].map((row, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "rgba(148,163,184,0.6)" }}>
-                  {row.icon}{row.text}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20, padding: "14px 16px", background: "rgba(255,255,255,0.04)", borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(148,163,184,0.7)" }}>
+                <MapPin size={16} color="#34d399" />{selectedVendor.location}
+              </div>
+              {selectedVendor.distance && (
+                <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "rgba(148,163,184,0.7)" }}>
+                  <Clock size={16} color="#34d399" />{selectedVendor.distance} walking
                 </div>
-              ))}
+              )}
             </div>
 
-            <div style={{ display: "flex", gap: 10 }}>
-              <button
-                onClick={() => setSelectedVendor(null)}
-                style={{ flex: 1, padding: "12px", borderRadius: 13, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.06)", color: "#e2e8f0", cursor: "pointer", fontSize: 14, fontWeight: 500, backdropFilter: "blur(12px)", transition: "all .2s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
-                onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
-              >Back to List</button>
-              <button
-                onClick={() => {
-                  const url = selectedVendor.locationUrl ||
-                    (selectedVendor.lat && selectedVendor.lng
-                      ? `https://www.google.com/maps/dir/?api=1&destination=${selectedVendor.lat},${selectedVendor.lng}`
-                      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedVendor.location)}`);
-                  window.open(url, "_blank");
-                }}
-                style={{ flex: 1, padding: "12px", borderRadius: 13, border: "none", background: "linear-gradient(135deg,#34d399,#059669)", color: "#fff", cursor: "pointer", fontSize: 14, fontWeight: 600, boxShadow: "0 0 20px rgba(52,211,153,0.35)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all .2s" }}
-                onMouseEnter={e => e.currentTarget.style.boxShadow = "0 0 30px rgba(52,211,153,0.5)"}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = "0 0 20px rgba(52,211,153,0.35)"}
-              >
-                <Navigation size={16} /> Get Directions
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                const url = selectedVendor.locationUrl ||
+                  (selectedVendor.lat && selectedVendor.lng
+                    ? `https://www.google.com/maps/dir/?api=1&destination=${selectedVendor.lat},${selectedVendor.lng}`
+                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedVendor.location)}`);
+                window.open(url, "_blank");
+              }}
+              style={{ width: "100%", padding: "14px", borderRadius: 14, border: "none", background: "linear-gradient(135deg,#34d399,#059669)", color: "#fff", cursor: "pointer", fontSize: 15, fontWeight: 600, boxShadow: "0 0 24px rgba(52,211,153,0.35)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+            >
+              <Navigation size={18} /> Get Directions
+            </button>
           </div>
         </div>
       )}
