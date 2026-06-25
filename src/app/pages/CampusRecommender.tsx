@@ -12,6 +12,39 @@ interface Vendor {
 
 type Category = "All" | "Food/Mess" | "Stationery/Xerox" | "Medical" | "Other";
 
+function categoryEmoji(cat: string) {
+  if (cat === "Food/Mess") return "🍽️";
+  if (cat === "Medical") return "💊";
+  return "📚";
+}
+
+function VendorImage({ url, name, category }: { url: string; name: string; category: string }) {
+  const [failed, setFailed] = useState(!url);
+
+  if (failed || !url) {
+    return (
+      <div style={{
+        width: "100%", height: "100%",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center", gap: 8,
+        background: "linear-gradient(135deg,rgba(52,211,153,0.1),rgba(5,150,105,0.15))",
+      }}>
+        <span style={{ fontSize: 48 }}>{categoryEmoji(category)}</span>
+        <span style={{ fontSize: 12, color: "rgba(148,163,184,0.6)" }}>{name}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={url}
+      alt={name}
+      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 function toEmbedUrl(url: string): string {
   if (url.includes("/maps/embed")) return url;
   const coordMatch = url.match(/[/@](-?\d+\.\d+),(-?\d+\.\d+)/);
@@ -127,33 +160,8 @@ export function CampusRecommender() {
                 onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = fits ? "rgba(52,211,153,0.2)" : "rgba(255,255,255,0.09)"; }}
               >
                 {/* Image */}
-                <div style={{ position: "relative", height: 180, overflow: "hidden", background: "rgba(255,255,255,0.05)" }}>
-                  {vendor.imageUrl ? (
-                    <img
-                      src={vendor.imageUrl}
-                      alt={vendor.name}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      onError={e => {
-                        e.currentTarget.style.display = "none";
-                        (e.currentTarget.nextElementSibling as HTMLElement).style.display = "flex";
-                      }}
-                    />
-                  ) : null}
-                  {/* Fallback when no image or broken URL */}
-                  <div style={{
-                    display: vendor.imageUrl ? "none" : "flex",
-                    width: "100%", height: "100%",
-                    alignItems: "center", justifyContent: "center",
-                    flexDirection: "column", gap: 8,
-                    background: "linear-gradient(135deg, rgba(52,211,153,0.08), rgba(5,150,105,0.12))",
-                    position: vendor.imageUrl ? "absolute" : "relative",
-                    inset: 0,
-                  }}>
-                    <span style={{ fontSize: 40 }}>
-                      {vendor.category === "Food/Mess" ? "🍽️" : vendor.category === "Medical" ? "💊" : "📚"}
-                    </span>
-                    <span style={{ fontSize: 12, color: "rgba(148,163,184,0.5)" }}>{vendor.category}</span>
-                  </div>
+                <div style={{ position: "relative", height: 180, overflow: "hidden" }}>
+                  <VendorImage url={vendor.imageUrl} name={vendor.name} category={vendor.category} />
                   {/* Gradient overlay */}
                   <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(7,9,26,0.7) 0%, transparent 50%)" }} />
                   <div style={{ position: "absolute", top: 10, right: 10, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(8px)", padding: "4px 10px", borderRadius: 20, fontSize: 12, color: "#e2e8f0" }}>
